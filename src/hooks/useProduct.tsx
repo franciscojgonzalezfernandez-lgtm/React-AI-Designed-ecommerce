@@ -4,6 +4,25 @@ import { getProductAction } from "@/actions/get-product.actions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router";
 
+/**
+ * Hook to load and mutate a single product resource.
+ *
+ * Responsibilities:
+ * - Fetch product data using `getProductAction` and cache it under
+ *   query keys ["product", { idSlug }].
+ * - Provide mutations for create/update and delete using the
+ *   corresponding action functions. On success the hook updates or
+ *   invalidates related queries to keep the cache consistent.
+ *
+ * Notes on API actions:
+ * - `getProductAction({ idSlug })` should return the product object
+ *   or throw on error. The hook sets retry: false and a 5 minute
+ *   staleTime to reduce repeated requests.
+ * - `createUpdateProductAction` and `deleteProductAction` are used
+ *   with react-query mutations and must accept/return the expected
+ *   payload shapes consumed by onSuccess handlers below.
+ */
+
 export const useProduct = () => {
   const queryClient = useQueryClient();
   const idSlug = useParams().idSlug || "id";
@@ -22,11 +41,11 @@ export const useProduct = () => {
       // QueryData update.
       queryClient.setQueryData(
         ["product", { idSlug: productReceived.slug }],
-        productReceived
+        productReceived,
       );
       queryClient.setQueryData(
         ["product", { id: productReceived.id }],
-        productReceived
+        productReceived,
       );
     },
   });

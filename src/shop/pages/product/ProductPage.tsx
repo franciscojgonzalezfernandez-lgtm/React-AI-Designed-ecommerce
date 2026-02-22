@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * Product detail page component.
+ *
+ * Shows product images, basic info (title, price, stock), size selector,
+ * quantity controls and an Add to cart button. Data is loaded via the
+ * `useProduct` hook (see `src/hooks/useProduct.ts`) which performs the
+ * API request. Keep this component purely presentational — business logic
+ * (API calls, cart mutations) should live in hooks or stores.
+ */
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Minus, Plus } from "lucide-react";
@@ -9,11 +18,26 @@ import { useProduct } from "@/hooks/useProduct";
 import type { size } from "@/interfaces/Product";
 
 export const ProductPage = () => {
+  /**
+   * Load product data.
+   *
+   * Note: `useProduct` encapsulates the API call and returns the product
+   * resource (or undefined while loading / on error). Typical shape:
+   * { id, title, price, description, images[], stock, sizes[] }
+   * If you need loading/error states here, extend the hook to return them.
+   */
   const { data } = useProduct();
   /* const [selectedColor, setSelectedColor] = useState(0); */
   const [selectedSize, setSelectedSize] = useState<size | null>(null);
   const [quantity, setQuantity] = useState(1);
 
+  /**
+   * Adjusts the selected quantity by `delta` while keeping it within safe
+   * bounds. Prevents quantities below 1 or above 99.
+   *
+   * Edge cases: rapid clicks are clamped. If the product has limited
+   * stock, the Add to cart button further prevents invalid quantities.
+   */
   const handleQuantityChange = (delta: number) => {
     const newQuantity = quantity + delta;
     if (newQuantity >= 1 && newQuantity <= 99) {
@@ -44,6 +68,11 @@ export const ProductPage = () => {
               <CustomPhotoGallery
                 productName={data.title}
                 images={data.images}
+                /*
+                 * CustomPhotoGallery: simple gallery component that expects
+                 * a product name and an array of image URLs/objects. Images
+                 * are provided by the product API via `data.images`.
+                 */
               />
             )}
           </div>
@@ -169,6 +198,14 @@ export const ProductPage = () => {
               <Button
                 size="lg"
                 className="w-full bg-black hover:bg-gray-800 text-white h-14 text-base disabled:bg-gray-300 disabled:cursor-not-allowed"
+                /*
+                 * Button disabled rules (preventing invalid add-to-cart):
+                 * - no stock available
+                 * - requested quantity exceeds available stock
+                 * - no size selected (when product has sizes)
+                 *
+                 * The displayed label multiplies price by quantity.
+                 */
                 disabled={
                   data.stock === 0 || quantity > data.stock || !selectedSize
                 }

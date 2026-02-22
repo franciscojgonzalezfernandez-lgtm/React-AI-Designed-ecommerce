@@ -1,7 +1,20 @@
 import { teslaApi } from "@/api/TesloApi";
 import type { Product } from "@/interfaces/Product";
+
+/**
+ * Create or update a product.
+ *
+ * API:
+ * - POST /products       (create when id === 'new')
+ * - PATCH /products/:id  (update when id !== 'new')
+ *
+ * Input: Partial<Product> & { files?: File[] }
+ * - files: optional images to upload. They are uploaded first and
+ *   their returned file names are appended to the images array.
+ * Output: Product (with images normalized to full URLs)
+ */
 export const createUpdateProductAction = async (
-  productLike: Partial<Product> & { files?: File[] }
+  productLike: Partial<Product> & { files?: File[] },
 ): Promise<Product> => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, user, images = [], files = [], ...restProps } = productLike;
@@ -13,6 +26,8 @@ export const createUpdateProductAction = async (
   restProps.price = Number(restProps.price || 0);
   restProps.stock = Number(restProps.stock || 0);
 
+  // If new files were provided, upload them and append the returned
+  // filenames to the images array before sending create/update to API.
   if (files.length) {
     const imageNames = await uploadFiles(files);
     images.push(...imageNames);

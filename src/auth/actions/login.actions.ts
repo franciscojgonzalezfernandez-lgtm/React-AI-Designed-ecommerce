@@ -6,6 +6,14 @@ interface Options {
   password: string;
 }
 
+/**
+ * Perform authentication against the backend.
+ *
+ * API: POST ${VITE_API_URL}/auth/login
+ * Input: { email, password }
+ * Output: Login object (typically contains user info and token).
+ * Errors are re-thrown to the caller.
+ */
 export const loginAction = async ({
   email,
   password,
@@ -16,7 +24,7 @@ export const loginAction = async ({
       {
         email,
         password,
-      }
+      },
     );
     return data;
   } catch (err) {

@@ -1,5 +1,17 @@
 import { teslaApi } from "@/api/TesloApi";
 import type { ProductsResponse } from "@/interfaces/Products.response";
+
+/**
+ * Fetch a paginated list of products.
+ *
+ * API: GET /products
+ * Query params: offset, limit, gender, sizes, minPrice, maxPrice, q
+ * Output: ProductsResponse { total, products: Product[] }
+ *
+ * Behavior: image paths returned by the API are normalized to full URLs
+ * by prefixing with VITE_API_URL + ROUTE_TO_IMAGES when they are not
+ * already absolute URLs.
+ */
 export const ROUTE_TO_IMAGES = "/files/product/";
 
 export interface Options {

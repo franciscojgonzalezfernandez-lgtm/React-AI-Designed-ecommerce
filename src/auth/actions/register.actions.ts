@@ -7,6 +7,13 @@ interface Options {
   fullName: string;
 }
 
+/**
+ * Register a new user.
+ *
+ * API: POST ${VITE_API_URL}/auth/register
+ * Input: { email, password, fullName }
+ * Output: Login object (user + token). Errors re-thrown.
+ */
 export const registerAction = async ({
   email,
   password,
@@ -19,7 +26,7 @@ export const registerAction = async ({
         email,
         password,
         fullName,
-      }
+      },
     );
     return data;
   } catch (err) {

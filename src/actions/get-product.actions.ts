@@ -2,6 +2,18 @@ import { teslaApi } from "@/api/TesloApi";
 import type { Product } from "@/interfaces/Product";
 import { ROUTE_TO_IMAGES } from "./get-products.actions";
 
+/**
+ * Fetch a single product by id or slug.
+ *
+ * API: GET /products/:idSlug
+ * Input: { idSlug }
+ * Output: Product object (partial allowed for 'new').
+ *
+ * Behavior: if idSlug === 'new' returns a DUMMY_PRODUCT for UI creation
+ * flows. Also normalizes image URLs: if an image path isn't absolute it
+ * prefixes it with the API base URL + images route.
+ */
+
 const DUMMY_PRODUCT: Partial<Product> = {
   id: "new",
   title: "",
