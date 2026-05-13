@@ -4,7 +4,7 @@
 
 **A production-ready minimalist e-commerce frontend** built with cutting-edge technology. This is the **frontend** of a complete **full-stack solution** showcasing modern React patterns, type safety, and blazing-fast performance.
 
-👈 **[Live Demo](https://franciscojgonzalezfernandez-lgtm.github.io/minimalist-e-commerce/)**
+👈 **[Live Demo](https://franciscojgonzalezfernandez-lgtm.github.io/React-AI-Designed-ecommerce/)**
 
 📖 **[Project explanation](https://franciscojgonzalezfernandez-lgtm.github.io/my-portfolio/portfolio/ecommerce-platform)**
 
